@@ -42,6 +42,9 @@ export default function RootLayout({
               <Link href="/routine" className="hover:text-foreground">
                 Routine
               </Link>
+              <Link href="/method" className="hover:text-foreground">
+                Method
+              </Link>
             </nav>
           </div>
         </header>

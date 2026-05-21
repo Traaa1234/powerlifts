@@ -8,8 +8,10 @@ import {
   rankedByMuscle,
 } from "@/lib/exercises";
 import { paretoMinutes } from "@/lib/pareto";
+import { buildRoutine } from "@/lib/routine";
 
 export default function Home() {
+  const routineMinutes = buildRoutine().totalMinutes;
   return (
     <div className="space-y-10">
       <section className="space-y-3">
@@ -60,12 +62,18 @@ export default function Home() {
         })}
       </section>
 
-      <section>
+      <section className="flex flex-wrap gap-3">
         <Link
           href="/routine"
           className="inline-flex items-center gap-2 border border-foreground px-6 py-3 font-mono uppercase tracking-wider text-sm hover:bg-foreground hover:text-background transition-colors"
         >
-          Build a 30-minute full-body workout →
+          Build a {routineMinutes}-minute full-body workout →
+        </Link>
+        <Link
+          href="/method"
+          className="inline-flex items-center gap-2 border border-border px-6 py-3 font-mono uppercase tracking-wider text-sm hover:border-foreground transition-colors"
+        >
+          How it works →
         </Link>
       </section>
     </div>

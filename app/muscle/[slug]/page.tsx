@@ -44,7 +44,13 @@ export default function MusclePage({ params }: { params: { slug: string } }) {
         </div>
         <p className="text-muted-foreground text-sm">
           Cut everything below the 80/20 line. A typical 5-day bro split spends
-          ~60 min/week per muscle. Pareto does it in {totalMin}.
+          ~60 min/week per muscle. Pareto does it in {totalMin}.{" "}
+          <Link
+            href="/method"
+            className="underline hover:text-foreground font-mono uppercase tracking-wider text-xs"
+          >
+            How this is scored →
+          </Link>
         </p>
       </header>
 
@@ -69,7 +75,29 @@ export default function MusclePage({ params }: { params: { slug: string } }) {
                         </Badge>
                       </div>
                     </div>
-                    <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                    <div className="flex flex-wrap items-center gap-2 mt-3">
+                      {ex.secondary.length > 0 ? (
+                        <>
+                          <Badge className="font-mono uppercase">
+                            Compound
+                          </Badge>
+                          <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                            Also trains:{" "}
+                            {ex.secondary
+                              .map((m) => MUSCLE_LABELS[m])
+                              .join(", ")}
+                          </span>
+                        </>
+                      ) : (
+                        <Badge
+                          variant="secondary"
+                          className="font-mono uppercase"
+                        >
+                          Isolation — {MUSCLE_LABELS[ex.primary]} only
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
                       {ex.why_it_works}
                     </p>
                   </div>

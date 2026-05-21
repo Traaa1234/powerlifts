@@ -31,8 +31,12 @@ type MuscleGroup = "chest" | "back" | "legs" | "shoulders" | "arms" | "core";
 
 ## Pages
 1. **`/`** — 6-muscle grid (Chest, Back, Legs, Shoulders, Arms, Core). Cards link to muscle detail.
-2. **`/muscle/[slug]`** — Top-ranked exercises for that muscle (80/20 cutoff, top 5 max). Gold/silver/bronze badges for top 3. Show name, why_it_works, rep range, estimated minutes, YouTube search link. "Time saved vs typical bro split" stat at top.
-3. **`/routine`** — Auto-generated <30 min full-body workout. Greedy: pick #1 from each muscle (legs → back → chest → shoulders → arms → core), sum times, stop at 30 min. Show total time and bro-split equivalent.
+2. **`/muscle/[slug]`** — Top-ranked exercises for that muscle (80/20 cutoff, top 5 max). Gold/silver/bronze badges for top 3. Show name, why_it_works, Compound/Isolation tag + secondary muscles, rep range, estimated minutes, YouTube search link. "Time saved vs typical bro split" stat at top.
+3. **`/routine`** — Auto-generated <30 min full-body workout via compound set-cover (see below). Shows per-lift primary/secondary muscles, a 6-muscle coverage strip, total time and bro-split equivalent.
+4. **`/method`** — Documentation page. Explains the score, the 80/20 cut, the bro-split baseline, both time-saved formulas, and compound coverage. Numbers are computed live from the data so docs never drift.
+
+## Routine builder (compound set-cover)
+Greedy weighted set-cover. Each round picks the exercise covering the most still-uncovered muscle groups (primary + secondary both count), ties broken by `pareto_score`, while keeping the session within 30 min. Result: Weighted Dips + Romanian Deadlift + Ab Wheel = 28 min, all 6 groups covered. Six separate primary lifts would need 51+ min, so compound coverage is what makes a true sub-30 full body possible.
 
 ## Pareto cutoff
 Sort exercises for a muscle by `pareto_score` desc. Include until cumulative impact ≥ 80% of total impact for that muscle, cap at top 5. Effectively all 3 seeded per muscle pass for v1.
