@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CustomRoutine } from "@/components/custom-routine";
+import { ExercisePicker } from "@/components/exercise-picker";
 import { MUSCLES, MUSCLE_LABELS, youtubeSearchUrl } from "@/lib/exercises";
 import {
   buildRoutine,
@@ -23,13 +24,18 @@ export default function RoutinePage() {
         </Link>
         <h1 className="text-5xl font-bold tracking-tight">Routine</h1>
         <p className="text-muted-foreground text-lg max-w-2xl">
-          Build your own from the lifts you picked, or take the auto-generated
-          80/20 full-body workout below.
+          Build your own — add lifts from any muscle group in the catalog
+          below — or take the auto-generated 80/20 full-body workout.
         </p>
       </header>
 
       {/* User's hand-picked routine */}
       <CustomRoutine />
+
+      <hr className="border-border" />
+
+      {/* Multi-muscle add-lifts catalog */}
+      <ExercisePicker />
 
       <hr className="border-border" />
 

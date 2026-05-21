@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useSelection } from "@/components/selection-provider";
@@ -42,20 +41,17 @@ export function CustomRoutine() {
           My routine
         </h2>
         <Card>
-          <CardContent className="p-8 text-center space-y-3">
+          <CardContent className="p-8 text-center">
             <p className="text-muted-foreground text-sm">
-              No lifts picked yet. Open any muscle page and tap{" "}
+              No lifts picked yet. Use the{" "}
+              <span className="font-mono text-foreground">Add lifts</span>{" "}
+              catalog below to pull exercises from any muscle group — or open a
+              muscle page and tap{" "}
               <span className="font-mono text-foreground">
                 + Add to routine
-              </span>{" "}
-              to build your own workout.
+              </span>
+              .
             </p>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 border border-foreground px-5 py-2.5 font-mono uppercase tracking-wider text-xs hover:bg-foreground hover:text-background transition-colors"
-            >
-              Browse muscles →
-            </Link>
           </CardContent>
         </Card>
       </section>

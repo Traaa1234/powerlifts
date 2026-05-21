@@ -32,7 +32,7 @@ type MuscleGroup = "chest" | "back" | "legs" | "shoulders" | "arms" | "core";
 ## Pages
 1. **`/`** — 6-muscle grid (Chest, Back, Legs, Shoulders, Arms, Core). Cards link to muscle detail.
 2. **`/muscle/[slug]`** — **Every** exercise for that muscle, ranked by `pareto_score` — nothing hidden. The 80/20 line is drawn through the list (a divider) marking the recommended subset. Gold/silver/bronze badges for top 3. Each card: name, why_it_works, Compound/Isolation tag + secondary muscles, rep range, estimated minutes, EMG-research link, YouTube link, and a **+ Add to routine** toggle. Header stats: total lifts, 80/20 minutes, time saved.
-3. **`/routine`** — Two parts: **My routine** (the user's hand-picked lifts, with total time + muscle coverage + remove/clear) and the **Auto 80/20 routine** (compound set-cover, see below).
+3. **`/routine`** — Three parts: **My routine** (the user's hand-picked lifts, with total time + muscle coverage + remove/clear), **Add lifts** (a collapsible catalog of all 6 muscle groups — every exercise with a toggle, so a multi-muscle routine is built from one page), and the **Auto 80/20 routine** (compound set-cover, see below).
 4. **`/method`** — Documentation page. Explains the score in plain English, the 80/20 line, the bro-split baseline, both time-saved formulas, compound coverage, and a Sources section naming the real evidence bases. Numbers are computed live from the data so docs never drift.
 
 ## Selection / pick-and-choose
