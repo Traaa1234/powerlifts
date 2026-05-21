@@ -236,8 +236,52 @@ export default function MethodPage() {
         </p>
       </Section>
 
-      {/* 6. Sources */}
-      <Section n="06" title="Sources & honesty">
+      {/* 6. Intensity vs volume */}
+      <Section n="06" title="Intensity vs volume">
+        <p>
+          When you build your own routine, the summary at the top grades it on
+          two numbers that sound alike but mean opposite things.
+        </p>
+        <dl className="space-y-3">
+          <Term name="Intensity">
+            <b>&ldquo;How hard do these lifts hit?&rdquo;</b> It is the{" "}
+            <b>average</b> of your picked lifts&apos; impact scores. Choose
+            heavy compounds — squats, deadlifts, presses — and it rates Hard or
+            Brutal. Choose light isolation work and it rates Light. Because it
+            is an average, adding a sixth easy exercise will not raise your
+            intensity — it may even pull it down. Bands: Light (under 70),
+            Moderate (70–79), Hard (80–89), Brutal (90+).
+          </Term>
+          <Term name="Volume">
+            <b>&ldquo;How much total work am I doing?&rdquo;</b> Volume is a
+            running total. Every lift you add piles more on, and every muscle a
+            lift trains adds to the pile — the full impact for its primary
+            muscle, half for each assisting muscle. So volume always climbs as
+            your routine grows.
+          </Term>
+        </dl>
+        <p>
+          The simplest way to keep them straight:{" "}
+          <b>intensity is how steep the hill is, volume is how far you walked</b>
+          . A single heavy deadlift is steep but short — high intensity, low
+          volume. Ten sets of light curls is a long flat walk — high volume,
+          low intensity. A good routine needs enough of both.
+        </p>
+        <p>
+          The <b>effect-per-muscle</b> bars take that same volume idea and split
+          it by muscle group, so you can see which muscles are getting the work
+          (Heavy / Moderate / Light) and which are being skipped (Untrained) —
+          a quick read on whether your routine is balanced.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Both numbers are built from{" "}
+          <code className="text-foreground">impact_score</code>, so the same
+          honesty applies — see Sources below.
+        </p>
+      </Section>
+
+      {/* 7. Sources */}
+      <Section n="07" title="Sources & honesty">
         <p>
           Straight talk: <code className="text-foreground">impact_score</code>{" "}
           and <code className="text-foreground">time_efficiency_score</code> are{" "}
