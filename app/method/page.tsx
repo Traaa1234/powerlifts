@@ -273,10 +273,42 @@ export default function MethodPage() {
           (Heavy / Moderate / Light) and which are being skipped (Untrained) —
           a quick read on whether your routine is balanced.
         </p>
-        <p className="text-xs text-muted-foreground">
-          Both numbers are built from{" "}
-          <code className="text-foreground">impact_score</code>, so the same
-          honesty applies — see Sources below.
+        <h3 className="font-mono uppercase tracking-wider text-sm text-foreground pt-2">
+          How this differs from the textbook
+        </h3>
+        <p>
+          Important: these are PowerLifts&apos; own proxies, not the
+          exercise-science definitions. Both are built from{" "}
+          <code className="text-foreground">impact_score</code> — an editorial
+          estimate — so the honesty caveat in Sources applies here too.
+        </p>
+        <ul className="space-y-2 list-none">
+          <Cite
+            href={scholarUrl(
+              "resistance training volume hypertrophy dose response Schoenfeld",
+            )}
+          >
+            <b>Volume</b>, in the research, means <b>hard sets per muscle per
+            week</b> (or the older &ldquo;volume load&rdquo; = sets × reps ×
+            load). Its dose-response with muscle growth is well studied.
+            PowerLifts has no sets, reps, or weights — so its volume is an
+            exercise-<i>selection</i> proxy, not a sets-per-week count.
+          </Cite>
+          <Cite
+            href={scholarUrl(
+              "training intensity percent 1RM strength hypertrophy",
+            )}
+          >
+            <b>Intensity</b>, in the research, means <b>load as a % of your
+            1-rep-max</b> (or effort measured by reps-in-reserve / RPE).
+            PowerLifts doesn&apos;t know your weights or 1RM, so it uses the
+            average impact of your chosen lifts instead.
+          </Cite>
+        </ul>
+        <p>
+          Bottom line: read PowerLifts&apos; intensity and volume as &ldquo;did
+          I pick hard-hitting lifts, and enough of them?&rdquo; — not as
+          &ldquo;% 1RM&rdquo; or &ldquo;sets per week.&rdquo;
         </p>
       </Section>
 
