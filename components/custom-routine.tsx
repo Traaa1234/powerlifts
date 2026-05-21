@@ -6,12 +6,15 @@ import { useSelection } from "@/components/selection-provider";
 import {
   type Exercise,
   type MuscleGroup,
-  MUSCLES,
   MUSCLE_LABELS,
   exerciseById,
   youtubeSearchUrl,
 } from "@/lib/exercises";
-import { musclesWorked } from "@/lib/routine";
+import {
+  type EffectLevel,
+  type MuscleEffect,
+  analyzeRoutine,
+} from "@/lib/routine-analysis";
 
 const ORDER: Record<MuscleGroup, number> = {
   legs: 0,
@@ -22,6 +25,15 @@ const ORDER: Record<MuscleGroup, number> = {
   core: 5,
 };
 
+const INTENSITY_GOLD = new Set(["Hard", "Brutal"]);
+
+const EFFECT_FILL: Record<EffectLevel, string> = {
+  Untrained: "bg-transparent",
+  Light: "bg-muted-foreground",
+  Moderate: "bg-foreground",
+  Heavy: "bg-gold",
+};
+
 export function CustomRoutine() {
   const { selected, toggle, clear } = useSelection();
 
@@ -29,10 +41,6 @@ export function CustomRoutine() {
     .map((id) => exerciseById(id))
     .filter((ex): ex is Exercise => Boolean(ex))
     .sort((a, b) => ORDER[a.primary] - ORDER[b.primary]);
-
-  const totalMinutes = picks.reduce((s, ex) => s + ex.estimated_minutes, 0);
-  const covered = new Set<MuscleGroup>();
-  picks.forEach((ex) => musclesWorked(ex).forEach((m) => covered.add(m)));
 
   if (picks.length === 0) {
     return (
@@ -58,8 +66,13 @@ export function CustomRoutine() {
     );
   }
 
+  const a = analyzeRoutine(picks);
+  const effects = [...a.perMuscle].sort(
+    (x, y) => ORDER[x.muscle] - ORDER[y.muscle],
+  );
+
   return (
-    <section className="space-y-4">
+    <section className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="text-2xl font-bold tracking-tight font-mono uppercase">
           My routine
@@ -73,37 +86,44 @@ export function CustomRoutine() {
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 font-mono text-sm uppercase tracking-wider">
-        <span>
-          <span className="text-foreground font-bold text-lg">
-            {picks.length}
-          </span>{" "}
-          lifts
-        </span>
-        <span>
-          <span className="text-gold font-bold text-lg">{totalMinutes}</span>{" "}
-          min/session
-        </span>
+      {/* Summary stat tiles */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <Stat label="Muscle groups" value={`${a.musclesWorkedCount} / 6`} />
+        <Stat
+          label="Intensity"
+          value={a.intensity}
+          sub={`avg impact ${a.avgImpact}`}
+          gold={INTENSITY_GOLD.has(a.intensity)}
+        />
+        <Stat
+          label="Total volume"
+          value={String(a.totalVolume)}
+          sub="stimulus pts"
+        />
+        <Stat label="Time" value={`${a.totalMinutes} min`} />
+      </div>
+      <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground -mt-2">
+        {a.exerciseCount} lifts · {a.compoundCount} compound ·{" "}
+        {a.isolationCount} isolation
+      </p>
+
+      {/* Per-muscle effect bars */}
+      <div className="space-y-2">
+        <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+          Effect on each muscle
+        </div>
+        <div className="space-y-1.5">
+          {effects.map((effect) => (
+            <MuscleBar key={effect.muscle} effect={effect} />
+          ))}
+        </div>
+        <p className="text-[11px] text-muted-foreground pt-1">
+          Effect = a lift&apos;s full impact for its primary muscle, half for
+          each assisting muscle.
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {MUSCLES.map((m) => {
-          const hit = covered.has(m);
-          return (
-            <span
-              key={m}
-              className={`font-mono text-xs uppercase tracking-wider rounded-full border px-3 py-1 ${
-                hit
-                  ? "border-gold text-gold"
-                  : "border-border text-muted-foreground"
-              }`}
-            >
-              {MUSCLE_LABELS[m]}
-            </span>
-          );
-        })}
-      </div>
-
+      {/* Exercise list */}
       <ol className="space-y-3">
         {picks.map((ex, i) => (
           <li key={ex.id}>
@@ -157,5 +177,62 @@ export function CustomRoutine() {
         ))}
       </ol>
     </section>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  sub,
+  gold,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+  gold?: boolean;
+}) {
+  return (
+    <div className="border border-border rounded-lg p-4 space-y-1">
+      <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+        {label}
+      </div>
+      <div
+        className={`font-bold text-2xl ${gold ? "text-gold" : "text-foreground"}`}
+      >
+        {value}
+      </div>
+      {sub && (
+        <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
+          {sub}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MuscleBar({ effect }: { effect: MuscleEffect }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-20 shrink-0 font-mono text-xs uppercase tracking-wider">
+        {MUSCLE_LABELS[effect.muscle]}
+      </span>
+      <div className="flex-1 h-2.5 rounded-full bg-secondary overflow-hidden">
+        <div
+          className={`h-full rounded-full ${EFFECT_FILL[effect.level]}`}
+          style={{ width: `${Math.round(effect.share * 100)}%` }}
+        />
+      </div>
+      <span
+        className={`w-24 shrink-0 text-right font-mono text-xs uppercase tracking-wider ${
+          effect.level === "Untrained"
+            ? "text-muted-foreground"
+            : effect.level === "Heavy"
+              ? "text-gold"
+              : "text-foreground"
+        }`}
+      >
+        {effect.level}
+      </span>
+    </div>
   );
 }
