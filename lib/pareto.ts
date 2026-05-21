@@ -8,7 +8,12 @@ export function paretoScore(impact: number, efficiency: number): number {
   return Math.round((impact * efficiency) / 100);
 }
 
-export function rankAndCut(exercises: Exercise[]): RankedExercise[] {
+/**
+ * Ranks every exercise by pareto_score (descending). Nothing is removed —
+ * `aboveCut` flags the recommended 80/20 subset: the run of top lifts whose
+ * cumulative impact reaches 80% of the muscle's total, capped at 5.
+ */
+export function rankExercises(exercises: Exercise[]): RankedExercise[] {
   const ranked = exercises
     .map((ex) => ({
       ...ex,
@@ -19,18 +24,26 @@ export function rankAndCut(exercises: Exercise[]): RankedExercise[] {
   const totalImpact = ranked.reduce((sum, ex) => sum + ex.impact_score, 0);
   const target = totalImpact * PARETO_CUTOFF;
 
-  const cut: RankedExercise[] = [];
   let running = 0;
-  for (const ex of ranked) {
-    if (cut.length >= MAX_PER_MUSCLE) break;
-    cut.push({ ...ex, rank: cut.length + 1 });
-    running += ex.impact_score;
-    if (running >= target) break;
-  }
-  return cut;
+  let cutClosed = false;
+  return ranked.map((ex, i) => {
+    const aboveCut = !cutClosed && i < MAX_PER_MUSCLE;
+    if (aboveCut) {
+      running += ex.impact_score;
+      if (running >= target || i + 1 >= MAX_PER_MUSCLE) cutClosed = true;
+    }
+    return { ...ex, rank: i + 1, aboveCut };
+  });
 }
 
-export function paretoMinutes(exercises: RankedExercise[]): number {
+/** The recommended 80/20 subset of a ranked list. */
+export function recommended(ranked: RankedExercise[]): RankedExercise[] {
+  return ranked.filter((ex) => ex.aboveCut);
+}
+
+export function paretoMinutes(
+  exercises: { estimated_minutes: number }[],
+): number {
   return exercises.reduce((sum, ex) => sum + ex.estimated_minutes, 0);
 }
 

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
 import "./globals.css";
+import { SelectionProvider } from "@/components/selection-provider";
+import { RoutineNavLink } from "@/components/routine-nav-link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,25 +32,28 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
-        <header className="border-b border-border">
-          <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="font-mono text-lg font-bold tracking-tight">
-              POWERLIFTS
-            </Link>
-            <nav className="flex gap-6 text-sm font-mono uppercase tracking-wider text-muted-foreground">
-              <Link href="/" className="hover:text-foreground">
-                Muscles
+        <SelectionProvider>
+          <header className="border-b border-border">
+            <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
+              <Link
+                href="/"
+                className="font-mono text-lg font-bold tracking-tight"
+              >
+                POWERLIFTS
               </Link>
-              <Link href="/routine" className="hover:text-foreground">
-                Routine
-              </Link>
-              <Link href="/method" className="hover:text-foreground">
-                Method
-              </Link>
-            </nav>
-          </div>
-        </header>
-        <main className="mx-auto max-w-5xl px-6 py-10">{children}</main>
+              <nav className="flex gap-6 text-sm font-mono uppercase tracking-wider text-muted-foreground">
+                <Link href="/" className="hover:text-foreground">
+                  Muscles
+                </Link>
+                <RoutineNavLink />
+                <Link href="/method" className="hover:text-foreground">
+                  Method
+                </Link>
+              </nav>
+            </div>
+          </header>
+          <main className="mx-auto max-w-5xl px-6 py-10">{children}</main>
+        </SelectionProvider>
       </body>
     </html>
   );

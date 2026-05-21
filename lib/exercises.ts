@@ -1,5 +1,5 @@
 import rawExercises from "@/data/exercises.json";
-import { rankAndCut } from "./pareto";
+import { rankExercises } from "./pareto";
 
 export const MUSCLES = [
   "chest",
@@ -31,6 +31,7 @@ export type Exercise = {
 export type RankedExercise = Exercise & {
   pareto_score: number;
   rank: number;
+  aboveCut: boolean;
 };
 
 export const MUSCLE_LABELS: Record<MuscleGroup, string> = {
@@ -57,12 +58,22 @@ export function allExercises(): Exercise[] {
   return ALL;
 }
 
+export function exerciseById(id: string): Exercise | undefined {
+  return ALL.find((ex) => ex.id === id);
+}
+
 export function byMuscle(muscle: MuscleGroup): Exercise[] {
   return ALL.filter((ex) => ex.primary === muscle);
 }
 
+/** All exercises for a muscle, ranked — nothing removed. */
 export function rankedByMuscle(muscle: MuscleGroup): RankedExercise[] {
-  return rankAndCut(byMuscle(muscle));
+  return rankExercises(byMuscle(muscle));
+}
+
+/** Only the recommended 80/20 picks for a muscle. */
+export function recommendedByMuscle(muscle: MuscleGroup): RankedExercise[] {
+  return rankedByMuscle(muscle).filter((ex) => ex.aboveCut);
 }
 
 export function isMuscle(value: string): value is MuscleGroup {
@@ -72,4 +83,18 @@ export function isMuscle(value: string): value is MuscleGroup {
 export function youtubeSearchUrl(exerciseName: string): string {
   const q = encodeURIComponent(`${exerciseName} proper form`);
   return `https://www.youtube.com/results?search_query=${q}`;
+}
+
+/** Google Scholar search for an exercise's EMG-activation literature. */
+export function emgSearchUrl(exerciseName: string): string {
+  const q = encodeURIComponent(`${exerciseName} EMG muscle activation`);
+  return `https://scholar.google.com/scholar?q=${q}`;
+}
+
+export function scholarUrl(query: string): string {
+  return `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`;
+}
+
+export function webSearchUrl(query: string): string {
+  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 }

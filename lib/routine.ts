@@ -42,6 +42,7 @@ export function buildRoutine(): Routine {
     ...ex,
     pareto_score: paretoScore(ex.impact_score, ex.time_efficiency_score),
     rank: 0,
+    aboveCut: false,
   }));
 
   const covered = new Set<MuscleGroup>();

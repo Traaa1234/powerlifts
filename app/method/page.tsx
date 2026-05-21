@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MUSCLES, MUSCLE_LABELS, rankedByMuscle } from "@/lib/exercises";
+import {
+  MUSCLES,
+  MUSCLE_LABELS,
+  rankedByMuscle,
+  scholarUrl,
+  webSearchUrl,
+} from "@/lib/exercises";
 import {
   paretoMinutes,
+  recommended,
   timeSavedVsBroSplit,
   paretoScore,
   PARETO_CUTOFF,
@@ -18,7 +25,7 @@ import {
 export const metadata = {
   title: "PowerLifts — The Method",
   description:
-    "How exercises are scored, how the 80/20 cut works, and how time saved is calculated.",
+    "How exercises are scored, how the 80/20 line works, how time saved is calculated, and the research the scores draw on.",
 };
 
 export default function MethodPage() {
@@ -76,8 +83,8 @@ export default function MethodPage() {
           Think of it as <b>value shopping for your gym time</b>:{" "}
           <i>impact</i> is how good the lift is, <i>time-efficiency</i> is how
           cheap it is to do. The lifts that score high on <i>both</i> — big
-          results, low time cost — rise to the top. Everything in the app is
-          ranked and cut on this one number.
+          results, low time cost — rise to the top. Every ranking in the app is
+          sorted on this one number.
         </p>
         <p>
           Example — Barbell Bench Press: impact <b>95</b> × efficiency{" "}
@@ -85,16 +92,22 @@ export default function MethodPage() {
         </p>
       </Section>
 
-      {/* 2. The 80/20 cut */}
-      <Section n="02" title="The 80/20 cut">
+      {/* 2. The 80/20 line */}
+      <Section n="02" title="The 80/20 line">
         <p>
           The Pareto Principle says ~80% of results come from ~20% of inputs.
-          PowerLifts applies it literally. For each muscle, exercises are sorted
-          by <code className="text-foreground">pareto_score</code>, then added
-          to the list only until their combined impact reaches{" "}
-          <b>{Math.round(PARETO_CUTOFF * 100)}%</b> of the muscle&apos;s total —
-          capped at the top 5. Everything below the line is cut. No machines, no
-          junk isolation.
+          For each muscle, every exercise is sorted by{" "}
+          <code className="text-foreground">pareto_score</code>. The top run of
+          lifts whose combined impact reaches{" "}
+          <b>{Math.round(PARETO_CUTOFF * 100)}%</b> of the muscle&apos;s total
+          (capped at 5) are the <b>80/20 picks</b> — the short list that earns
+          you most of the result.
+        </p>
+        <p>
+          Nothing is hidden. Every lift stays on its muscle page, fully ranked,
+          with the 80/20 line drawn through the list. Take the picks above the
+          line, or choose any lifts you like and add them to a custom routine —
+          the line is a recommendation, not a wall.
         </p>
       </Section>
 
@@ -132,22 +145,22 @@ export default function MethodPage() {
         </Formula>
         <p>
           A bro split gives each muscle one {BRO_SPLIT_MIN_PER_MUSCLE_PER_WEEK}
-          -minute day. PowerLifts replaces that day with the short list of lifts
-          that survived the 80/20 cut:
+          -minute day. PowerLifts replaces that day with the muscle&apos;s 80/20
+          picks (the lifts above the line):
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm font-mono">
             <thead>
               <tr className="border-b border-border text-muted-foreground uppercase text-xs tracking-wider">
                 <th className="text-left py-2">Muscle</th>
-                <th className="text-right py-2">Pareto min</th>
+                <th className="text-right py-2">80/20 min</th>
                 <th className="text-right py-2">Bro split</th>
                 <th className="text-right py-2">Saved</th>
               </tr>
             </thead>
             <tbody>
               {MUSCLES.map((m) => {
-                const min = paretoMinutes(rankedByMuscle(m));
+                const min = paretoMinutes(recommended(rankedByMuscle(m)));
                 return (
                   <tr key={m} className="border-b border-border/50">
                     <td className="py-2">{MUSCLE_LABELS[m]}</td>
@@ -223,6 +236,68 @@ export default function MethodPage() {
         </p>
       </Section>
 
+      {/* 6. Sources */}
+      <Section n="06" title="Sources & honesty">
+        <p>
+          Straight talk: <code className="text-foreground">impact_score</code>{" "}
+          and <code className="text-foreground">time_efficiency_score</code> are{" "}
+          <b>editorial estimates</b>. They translate the consensus of
+          EMG-activation research and established training science into a 1–100
+          scale. They are not readings from a single lab study, and no one paper
+          maps onto an exact number. Treat them as an informed starting point,
+          not gospel.
+        </p>
+        <p className="text-foreground font-mono uppercase tracking-wider text-xs">
+          Evidence base behind impact_score
+        </p>
+        <ul className="space-y-2 list-none">
+          <Cite href={webSearchUrl("ACE commissioned EMG study best exercises")}>
+            <b>ACE-commissioned EMG studies</b> — the American Council on
+            Exercise has published EMG-ranked &ldquo;best exercise&rdquo; lists
+            for chest, back, glutes, biceps, triceps, and abs.
+          </Cite>
+          <Cite
+            href={scholarUrl("Boeckh-Behrens Buskies EMG fitnesskrafttraining")}
+          >
+            <b>Boeckh-Behrens &amp; Buskies EMG database</b> — a large German
+            dataset of electromyographic activation across common gym lifts.
+          </Cite>
+          <Cite href={webSearchUrl("Bret Contreras Inside the Muscles EMG")}>
+            <b>Contreras, &ldquo;Inside the Muscles&rdquo;</b> — a long-running
+            EMG measurement series across upper- and lower-body exercises.
+          </Cite>
+          <Cite
+            href={scholarUrl("Brad Schoenfeld hypertrophy mechanisms training")}
+          >
+            <b>Schoenfeld hypertrophy reviews</b> — peer-reviewed work on what
+            actually drives growth: mechanical tension, range of motion,
+            effective reps.
+          </Cite>
+        </ul>
+        <p className="text-foreground font-mono uppercase tracking-wider text-xs pt-2">
+          Behind time_efficiency_score
+        </p>
+        <p>
+          Standard set-volume and rest-interval research — including{" "}
+          <a
+            href={scholarUrl("Schoenfeld rest interval hypertrophy")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground"
+          >
+            Schoenfeld&apos;s rest-interval work
+          </a>{" "}
+          — plus practical loading guidelines: how many hard sets a lift needs
+          and how long it must be rested between them.
+        </p>
+        <p>
+          Every exercise card links an{" "}
+          <span className="font-mono text-foreground">EMG research →</span>{" "}
+          search so you can read the primary literature for that lift and judge
+          the rating yourself.
+        </p>
+      </Section>
+
       <div className="flex gap-3 flex-wrap pt-2">
         <Link
           href="/"
@@ -281,5 +356,27 @@ function Formula({ children }: { children: React.ReactNode }) {
         {children}
       </CardContent>
     </Card>
+  );
+}
+
+function Cite({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="border-l-2 border-border pl-4">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-foreground"
+      >
+        {children}{" "}
+        <span className="font-mono text-xs uppercase tracking-wider">→</span>
+      </a>
+    </li>
   );
 }

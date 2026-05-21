@@ -8,7 +8,7 @@ import {
   allExercises,
   rankedByMuscle,
 } from "@/lib/exercises";
-import { paretoMinutes } from "@/lib/pareto";
+import { paretoMinutes, recommended } from "@/lib/pareto";
 import { buildRoutine } from "@/lib/routine";
 
 export default function Home() {
@@ -22,15 +22,16 @@ export default function Home() {
         </h1>
         <p className="text-muted-foreground text-lg max-w-2xl">
           {exerciseCount} exercises — barbell, bodyweight, kettlebell. Six
-          muscle groups. Ranked by impact-per-minute. Everything else has been
-          cut.
+          muscle groups. Ranked by impact-per-minute, with the 80/20 picks
+          marked. Pick your own or take the auto routine.
         </p>
       </section>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {MUSCLES.map((muscle) => {
-          const top = rankedByMuscle(muscle);
-          const minutes = paretoMinutes(top);
+          const ranked = rankedByMuscle(muscle);
+          const picks = recommended(ranked);
+          const minutes = paretoMinutes(picks);
           return (
             <Link key={muscle} href={`/muscle/${muscle}`} className="group">
               <Card className="h-full transition-colors group-hover:border-foreground/40">
@@ -40,7 +41,7 @@ export default function Home() {
                       {MUSCLE_LABELS[muscle]}
                     </CardTitle>
                     <Badge variant="outline" className="font-mono">
-                      {top.length} lifts
+                      {ranked.length} lifts
                     </Badge>
                   </div>
                 </CardHeader>
@@ -53,10 +54,10 @@ export default function Home() {
                       <span className="text-foreground font-bold">
                         {minutes}
                       </span>{" "}
-                      min/wk
+                      80/20 min
                     </span>
                     <span>·</span>
-                    <span className="truncate">Top: {top[0]?.name}</span>
+                    <span className="truncate">Top: {picks[0]?.name}</span>
                   </div>
                 </CardContent>
               </Card>
