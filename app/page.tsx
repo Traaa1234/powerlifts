@@ -5,6 +5,7 @@ import {
   MUSCLES,
   MUSCLE_LABELS,
   MUSCLE_TAGLINES,
+  allExercises,
   rankedByMuscle,
 } from "@/lib/exercises";
 import { paretoMinutes } from "@/lib/pareto";
@@ -12,6 +13,7 @@ import { buildRoutine } from "@/lib/routine";
 
 export default function Home() {
   const routineMinutes = buildRoutine().totalMinutes;
+  const exerciseCount = allExercises().length;
   return (
     <div className="space-y-10">
       <section className="space-y-3">
@@ -19,8 +21,9 @@ export default function Home() {
           The minimum lifts for maximum gains.
         </h1>
         <p className="text-muted-foreground text-lg max-w-2xl">
-          Eighteen exercises. Six muscle groups. Ranked by impact-per-minute.
-          Everything else has been cut.
+          {exerciseCount} exercises — barbell, bodyweight, kettlebell. Six
+          muscle groups. Ranked by impact-per-minute. Everything else has been
+          cut.
         </p>
       </section>
 

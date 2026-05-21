@@ -44,15 +44,18 @@ Sort exercises for a muscle by `pareto_score` desc. Include until cumulative imp
 ## Time-saved math
 Baseline = 60 min/muscle/week (5-day bro split @ 60 min). Pareto routine ≈ sum of `estimated_minutes` for the muscle's top exercises. Display `Save ~X min/week`.
 
-## Seed exercises (18)
+## Seed exercises (24)
 - **Chest:** Barbell Bench Press, Weighted Dips, Incline DB Press
 - **Back:** Weighted Pull-ups, Barbell Row, Deadlift
 - **Legs:** Barbell Squat, Romanian Deadlift, Bulgarian Split Squat
 - **Shoulders:** Overhead Press, Lateral Raise, Face Pull
 - **Arms:** Close-Grip Bench, Barbell Curl, Skull Crushers
 - **Core:** Hanging Leg Raise, Weighted Plank, Ab Wheel
+- **Kettlebell (compound):** KB Swing, KB Clean & Press, KB Goblet Squat, KB Single-Arm Row, KB Front Rack Carry, Turkish Get-Up
 
 Highest-EMG-activation variants only. No machines, no isolation that misses the 80/20.
+
+`impact_score` and `time_efficiency_score` are seeded expert estimates (editorial, not formula-derived); `pareto_score` is computed. With 4-5 exercises in several muscle groups, the 80/20 cut now actively trims weaker lifts (e.g. Bulgarian Split Squat off Legs, Turkish Get-Up off Core).
 
 ## Design
 - Dark mode default, high contrast

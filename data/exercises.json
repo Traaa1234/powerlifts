@@ -237,5 +237,84 @@
     "rep_range": "3x8-12",
     "estimated_minutes": 6,
     "why_it_works": "Combined dynamic and anti-extension load — recruits more abdominal fibers than any crunch variant."
+  },
+
+  {
+    "id": "kettlebell-swing",
+    "name": "Kettlebell Swing",
+    "primary": "legs",
+    "secondary": ["back", "core"],
+    "impact_score": 85,
+    "time_efficiency_score": 88,
+    "equipment": "kettlebell",
+    "difficulty": "beginner",
+    "rep_range": "4x15-20",
+    "estimated_minutes": 8,
+    "why_it_works": "Explosive hip hinge that fires the whole posterior chain ballistically — the highest power output per minute in the app."
+  },
+  {
+    "id": "kettlebell-clean-and-press",
+    "name": "Kettlebell Clean & Press",
+    "primary": "shoulders",
+    "secondary": ["legs", "back", "arms"],
+    "impact_score": 88,
+    "time_efficiency_score": 78,
+    "equipment": "kettlebell",
+    "difficulty": "intermediate",
+    "rep_range": "4x6-8/arm",
+    "estimated_minutes": 10,
+    "why_it_works": "One floor-to-overhead grind that loads legs, back, and shoulders in sequence — a full-body workout disguised as a press."
+  },
+  {
+    "id": "kettlebell-goblet-squat",
+    "name": "Kettlebell Goblet Squat",
+    "primary": "legs",
+    "secondary": ["core"],
+    "impact_score": 82,
+    "time_efficiency_score": 82,
+    "equipment": "kettlebell",
+    "difficulty": "beginner",
+    "rep_range": "3x10-12",
+    "estimated_minutes": 8,
+    "why_it_works": "Front-loaded squat that forces an upright torso through a deep range — the safest way to load the quads without a rack."
+  },
+  {
+    "id": "kettlebell-single-arm-row",
+    "name": "Kettlebell Single-Arm Row",
+    "primary": "back",
+    "secondary": ["arms"],
+    "impact_score": 82,
+    "time_efficiency_score": 82,
+    "equipment": "kettlebell",
+    "difficulty": "beginner",
+    "rep_range": "3x8-12/arm",
+    "estimated_minutes": 8,
+    "why_it_works": "Unilateral pull through a longer range than a barbell allows — exposes and corrects left-to-right back imbalances."
+  },
+  {
+    "id": "kettlebell-front-rack-carry",
+    "name": "Kettlebell Front Rack Carry",
+    "primary": "core",
+    "secondary": ["back", "shoulders"],
+    "impact_score": 80,
+    "time_efficiency_score": 85,
+    "equipment": "kettlebell",
+    "difficulty": "beginner",
+    "rep_range": "3x30-40m",
+    "estimated_minutes": 6,
+    "why_it_works": "Loaded walk under an offset front-rack load — builds bracing strength and grip while the core resists collapse."
+  },
+  {
+    "id": "turkish-get-up",
+    "name": "Turkish Get-Up",
+    "primary": "core",
+    "secondary": ["shoulders", "legs"],
+    "impact_score": 82,
+    "time_efficiency_score": 65,
+    "equipment": "kettlebell",
+    "difficulty": "advanced",
+    "rep_range": "3x3-5/side",
+    "estimated_minutes": 10,
+    "why_it_works": "A slow chain of loaded positions from the floor to standing — unmatched for shoulder stability and full-body control."
   }
 ]

@@ -42,28 +42,46 @@ export default function MethodPage() {
       </header>
 
       {/* 1. The score */}
-      <Section n="01" title="The score">
+      <Section n="01" title="The score — in plain English">
         <p>
-          Every exercise carries two researched ratings, each on a 1–100 scale.
+          Every exercise gets two scores, each from 1 to 100. They are{" "}
+          <b>expert estimates</b> — hand-rated from strength-training research,
+          not measured by a machine. Each one answers a simple question:
         </p>
         <dl className="space-y-3">
           <Term name="impact_score">
-            How much muscle the lift builds per hard set — driven by EMG
-            activation studies and whether the movement is compound or
-            isolation. Heavy multi-joint lifts (squat, deadlift, weighted
-            pull-up) sit at 90–100.
+            <b>&ldquo;How much will this build me?&rdquo;</b> A higher number
+            means the lift works more muscle at once and lets you keep adding
+            weight over time — so it grows you faster. A barbell squat trains
+            your whole lower body under hundreds of pounds, so it scores near
+            100. A lateral raise trains one small shoulder muscle with light
+            dumbbells, so it scores lower. Compound lifts (many muscles, one
+            move) beat isolation lifts (one muscle).
           </Term>
           <Term name="time_efficiency_score">
-            Gains relative to the clock — a function of sets needed and time
-            per set including rest. Short, dense movements (face pull, plank)
-            score highest here; long-rest strength work scores lower.
+            <b>&ldquo;How little time will it cost me?&rdquo;</b> A higher
+            number means fewer sets and shorter rest — you are in and out fast.
+            A plank scores high: hold for 30 seconds, barely rest, done. A heavy
+            squat scores low: five sets with three minutes of rest between each
+            eats your evening. A low score is not bad — it just means the lift
+            is expensive in time.
           </Term>
         </dl>
+        <p>
+          The two scores pull in opposite directions — the biggest lifts often
+          cost the most time. So PowerLifts multiplies them into one verdict:
+        </p>
         <Formula>pareto_score = impact_score × time_efficiency_score ÷ 100</Formula>
         <p>
+          Think of it as <b>value shopping for your gym time</b>:{" "}
+          <i>impact</i> is how good the lift is, <i>time-efficiency</i> is how
+          cheap it is to do. The lifts that score high on <i>both</i> — big
+          results, low time cost — rise to the top. Everything in the app is
+          ranked and cut on this one number.
+        </p>
+        <p>
           Example — Barbell Bench Press: impact <b>95</b> × efficiency{" "}
-          <b>75</b> ÷ 100 = <b>{exampleSaved}</b>. That single number is what
-          every ranking and routine is sorted by.
+          <b>75</b> ÷ 100 = <b>{exampleSaved}</b>.
         </p>
       </Section>
 
