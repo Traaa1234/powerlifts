@@ -2,8 +2,10 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
+  type Exercise,
   MUSCLES,
   MUSCLE_LABELS,
+  exerciseById,
   rankedByMuscle,
   scholarUrl,
   webSearchUrl,
@@ -21,6 +23,7 @@ import {
   ROUTINE_FREQUENCY_PER_WEEK,
   BRO_SPLIT_TOTAL_MIN_PER_WEEK,
 } from "@/lib/routine";
+import { analyzeRoutine, SECONDARY_FACTOR } from "@/lib/routine-analysis";
 
 export const metadata = {
   title: "PowerLifts — The Method",
@@ -31,6 +34,22 @@ export const metadata = {
 export default function MethodPage() {
   const routine = buildRoutine();
   const exampleSaved = paretoScore(95, 75); // bench: impact 95, efficiency 75
+
+  // Worked example for the intensity/volume section — computed live so the
+  // numbers in the docs always match what the app produces.
+  const exampleLifts = [
+    "barbell-squat",
+    "weighted-pull-ups",
+    "barbell-bench-press",
+  ]
+    .map((id) => exerciseById(id))
+    .filter((e): e is Exercise => Boolean(e));
+  const exampleAnalysis = analyzeRoutine(exampleLifts);
+  const volumeRows = exampleLifts.map((ex) => {
+    const multiplier = 1 + SECONDARY_FACTOR * ex.secondary.length;
+    return { ex, multiplier, add: ex.impact_score * multiplier };
+  });
+  const rawVolume = volumeRows.reduce((sum, r) => sum + r.add, 0);
 
   return (
     <div className="space-y-12">
@@ -273,6 +292,80 @@ export default function MethodPage() {
           (Heavy / Moderate / Light) and which are being skipped (Untrained) —
           a quick read on whether your routine is balanced.
         </p>
+
+        <h3 className="font-mono uppercase tracking-wider text-sm text-foreground pt-2">
+          The exact formulas
+        </h3>
+        <p>
+          Nothing here is a black box — both numbers are plain arithmetic on
+          your picked lifts&apos; impact scores. You can recompute them by hand.
+        </p>
+        <Formula>
+          <div>intensity = round( Σ impact_score ÷ number of lifts )</div>
+          <div className="text-muted-foreground">
+            band: Light &lt;70 · Moderate 70–79 · Hard 80–89 · Brutal 90+
+          </div>
+        </Formula>
+        <Formula>
+          <div>
+            volume = round( Σ impact_score × (1 + {SECONDARY_FACTOR} × assisting
+            muscles) )
+          </div>
+          <div className="text-muted-foreground">
+            each lift: its full impact for the primary muscle,{" "}
+            {SECONDARY_FACTOR}× for every assisting muscle
+          </div>
+        </Formula>
+
+        <h3 className="font-mono uppercase tracking-wider text-sm text-foreground pt-2">
+          Worked example
+        </h3>
+        <p>
+          A routine of three heavy compounds —{" "}
+          {exampleLifts.map((e) => e.name).join(", ")}:
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm font-mono">
+            <thead>
+              <tr className="border-b border-border text-muted-foreground uppercase text-xs tracking-wider">
+                <th className="text-left py-2">Lift</th>
+                <th className="text-right py-2">Impact</th>
+                <th className="text-right py-2">Assists</th>
+                <th className="text-right py-2">Volume add</th>
+              </tr>
+            </thead>
+            <tbody>
+              {volumeRows.map(({ ex, multiplier, add }) => (
+                <tr key={ex.id} className="border-b border-border/50">
+                  <td className="py-2">{ex.name}</td>
+                  <td className="text-right py-2">{ex.impact_score}</td>
+                  <td className="text-right py-2 text-muted-foreground">
+                    {ex.secondary.length}
+                  </td>
+                  <td className="text-right py-2">
+                    {ex.impact_score} × {multiplier} = {add}
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td className="py-2 font-bold" colSpan={3}>
+                  Total volume
+                </td>
+                <td className="text-right py-2 font-bold text-gold">
+                  {exampleAnalysis.totalVolume}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The volume column sums to {rawVolume}, rounded to{" "}
+          <b className="text-gold">{exampleAnalysis.totalVolume}</b>. Intensity ={" "}
+          ({exampleLifts.map((e) => e.impact_score).join(" + ")}) ÷{" "}
+          {exampleLifts.length} = <b>{exampleAnalysis.avgImpact}</b> →{" "}
+          <b className="text-gold">{exampleAnalysis.intensity}</b>.
+        </p>
+
         <h3 className="font-mono uppercase tracking-wider text-sm text-foreground pt-2">
           How this differs from the textbook
         </h3>
